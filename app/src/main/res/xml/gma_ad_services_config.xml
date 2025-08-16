@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <ad-services-config>
+        <consent-config>
+            <consent-setting consent-type="GDPR">
+                <is-request-in-eea-or-unknown>false</is-request-in-eea-or-unknown>
+            </consent-setting>
+        </consent-config>
+    </ad-services-config>
+</config>
