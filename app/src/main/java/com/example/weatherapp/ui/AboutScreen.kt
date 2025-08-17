@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui
 
+// Удалены импорты, связанные с текстовой ссылкой, которые больше не нужны
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,11 +13,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 
 // Экран "Об авторе"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavController) {
+    val context = LocalContext.current // Получаем контекст для Intent
+    // Ваша реальная ссылка на Политику конфиденциальности
+    val privacyPolicyUrl = "https://docs.google.com/document/d/1oLSwIfuKiCcQQaPQL8nj6nCA2PqtZ88T_o3wM8nZmfQ/edit?usp=sharing"
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,9 +56,21 @@ fun AboutScreen(navController: NavController) {
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "Telegram: @space_ranger3209",
-                    style = MaterialTheme.typography.bodyLarge
+                    text = "Telegram: @space_ranger",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                // КНОПКА: Политика конфиденциальности (возвращено к Button)
+                Button(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyUrl))
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp)
+                ) {
+                    Text("Политика конфиденциальности")
+                }
             }
         }
     )
