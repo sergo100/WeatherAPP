@@ -22,11 +22,11 @@ import com.google.android.gms.ads.MobileAds
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.weatherapp.workers.DailyWeatherNotificationWorker // НОВЫЙ ИМПОРТ: Для нашей фоновой задачи
-import com.example.weatherapp.utils.createNotificationChannel // НОВЫЙ ИМПОРТ: Для создания канала уведомлений
+import com.example.weatherapp.workers.DailyWeatherNotificationWorker
+import com.example.weatherapp.utils.createNotificationChannel
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import android.util.Log // Для логирования
+import android.util.Log
 
 // Главная активность приложения
 class MainActivity : ComponentActivity() {
@@ -84,25 +84,24 @@ class MainActivity : ComponentActivity() {
             eightAm.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        // Вычисляем задержку в миллисекундах до первого запуска задачи.
+        // Вычисляем задержку в миллисекундах до первого запуска
         val initialDelay = eightAm.timeInMillis - currentTime.timeInMillis
         Log.d("Scheduler", "Initial delay for weather notification: $initialDelay ms")
 
-        // Создаем запрос на периодическую работу (выполняется регулярно).
-        // Задача будет повторяться каждые 24 часа.
+        // Создаем запрос на периодическую работу
         val dailyWorkRequest = PeriodicWorkRequestBuilder<DailyWeatherNotificationWorker>(
-            repeatInterval = 24, // Интервал повторения: 24 часа
-            repeatIntervalTimeUnit = TimeUnit.HOURS // Единица измерения интервала: часы
+            repeatInterval = 24, // Повторять каждые 24 часа
+            repeatIntervalTimeUnit = TimeUnit.HOURS
         )
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS) // Устанавливаем начальную задержку
-            .addTag(DailyWeatherNotificationWorker.WORK_NAME) // Добавляем тег для уникальной идентификации работы
-            .build() // Строим запрос на работу
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .addTag(DailyWeatherNotificationWorker.WORK_NAME)
+            .build()
 
         // Планируем уникальную периодическую работу.
-        // ExistingPeriodicWorkPolicy.REPLACE: если работа с таким же именем уже существует, она будет заменена новой.
+        // ИСПРАВЛЕНИЕ: Изменено с ExistingPeriodicWorkPolicy.REPLACE на ExistingPeriodicWorkPolicy.UPDATE
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             DailyWeatherNotificationWorker.WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.UPDATE, // Используем рекомендуемую политику UPDATE
             dailyWorkRequest
         )
         Log.d("Scheduler", "Daily weather notification scheduled.")
