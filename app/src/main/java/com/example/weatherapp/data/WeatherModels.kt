@@ -1,62 +1,90 @@
-package com.example.weatherapp.data // ОБЯЗАТЕЛЬНО: Это должен быть ваш правильный package
+package com.example.weatherapp.data
 
-// --- Модели данных для ответа от API (weatherapi.com) ---
+// --------------------- API MODELS ---------------------
 
-// Основной класс ответа от WeatherAPI.com
 data class WeatherResponse(
-    val location: Location, // Информация о местоположении
-    val current: CurrentWeather, // Текущая погода
-    val forecast: Forecast // Прогноз погоды
-)
+    val location: Location,
+    val current: CurrentWeather,
+    val forecast: Forecast
+) {
+    // Конвертация из API-ответа в простую модель для UI
+    fun toWeatherModel(): WeatherModel {
+        val today = forecast.forecastday.firstOrNull()
+        val condition = current.condition.text
+        val iconUrl = "https:${current.condition.icon}"
 
-// Информация о местоположении
+        return WeatherModel(
+            city = location.name,
+            country = location.country,
+            temperature = "${current.temp_c}°C",
+            condition = condition,
+            iconUrl = iconUrl,
+            forecast = today?.hour?.map {
+                ForecastModel(
+                    time = it.time.takeLast(5), // оставляем только "часы:минуты"
+                    temperature = "${it.temp_c}°C",
+                    condition = it.condition.text,
+                    iconUrl = "https:${it.condition.icon}"
+                )
+            } ?: emptyList()
+        )
+    }
+}
+
 data class Location(
-    val name: String, // Название города
-    val region: String?, // Регион (область/штат)
-    val country: String, // Страна
-    val lat: Double, // Широта
-    val lon: Double, // Долгота
-    val localtime: String // Локальное время
+    val name: String,
+    val region: String,
+    val country: String
 )
 
-// Текущая погода
 data class CurrentWeather(
-    val temp_c: Double, // Температура в градусах Цельсия
-    val condition: Condition, // Описание погодного условия
-    val wind_kph: Double, // Скорость ветра в км/ч
-    val humidity: Int, // Влажность
-    val feelslike_c: Double // Ощущаемая температура в Цельсиях
+    val temp_c: Double,
+    val condition: Condition,
+    val wind_kph: Double,
+    val humidity: Int
 )
 
-// Описание погодного условия (для текущей и прогнозируемой погоды)
 data class Condition(
-    val text: String, // Текстовое описание (например, "Ясно", "Пасмурно")
-    val icon: String // URL иконки погоды
+    val text: String,
+    val icon: String
 )
 
-// Прогноз погоды
 data class Forecast(
-    val forecastday: List<ForecastDay> // Список прогнозов по дням
+    val forecastday: List<ForecastDay>
 )
 
-// Прогноз на один день
 data class ForecastDay(
-    val date: String, // Дата в формате YYYY-MM-DD
-    val day: DayDetails, // Детали погоды за день
-    val astro: Astro // Астрономические данные (восход/закат)
+    val date: String,
+    val day: Day,
+    val hour: List<Hour>
 )
 
-// Детали погоды за день
-data class DayDetails(
-    val maxtemp_c: Double, // Максимальная температура в Цельсиях
-    val mintemp_c: Double, // Минимальная температура в Цельсиях
-    val avgtemp_c: Double, // Средняя температура в Цельсиях
-    val condition: Condition // Описание погодного условия за день
-    // Могут быть и другие поля: maxwind_kph, totalprecip_mm, avghumidity, uv и т.д.
+data class Day(
+    val maxtemp_c: Double,
+    val mintemp_c: Double,
+    val condition: Condition
 )
 
-// Астрономические данные
-data class Astro(
-    val sunrise: String, // Время восхода солнца
-    val sunset: String // Время заката солнца
+data class Hour(
+    val time: String,
+    val temp_c: Double,
+    val condition: Condition
+)
+
+// --------------------- UI MODELS ---------------------
+
+data class WeatherModel(
+    val city: String,
+    val country: String,
+    val temperature: String,
+    val condition: String,
+    val iconUrl: String,
+    val forecast: List<ForecastModel>
+)
+
+data class ForecastModel(
+    val time: String,
+    val temperature: String,
+    val condition: String,
+    val iconUrl: String
 )

@@ -1,21 +1,74 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# ============================================
+# ProGuard правила для WeatherApp
+# ============================================
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Общие настройки
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# --------------------------------------------
+# Основные библиотеки
+# --------------------------------------------
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Kotlin
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keepclassmembers class ** {
+    @kotlin.Metadata *;
+}
+
+# Retrofit
+-keep class retrofit2.** { *; }
+-keep interface retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# OkHttp
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+
+# Gson
+-keep class com.google.gson.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# --------------------------------------------
+# Модели данных приложения
+# --------------------------------------------
+
+# Сохраняем все модели данных (адаптируйте под ваш пакет)
+-keep class com.example.weatherapp.data.model.** { *; }
+-keepclassmembers class com.example.weatherapp.data.model.** {
+    *;
+}
+
+# --------------------------------------------
+# Android специфичные правила
+# --------------------------------------------
+
+# Активности, сервисы и др. компоненты
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+
+# ViewBinding
+-keepclassmembers class * extends android.view.View {
+    <init>(android.content.Context);
+    <init>(android.content.Context, android.util.AttributeSet);
+    <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+# --------------------------------------------
+# Дополнительные настройки
+# --------------------------------------------
+
+# Для дебага (можно отключить в релизе)
+-keepattributes SourceFile,LineNumberTable
+
+# Игнорировать предупреждения
+-dontwarn kotlin.**
+-dontwarn com.google.**
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**

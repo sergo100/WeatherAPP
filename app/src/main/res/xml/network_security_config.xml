@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <!-- Разрешаем cleartext traffic только для определенных доменов, если нужно.
+         Для weatherapi.com это обычно не требуется, так как у них HTTPS.
+         Если у вас есть проблемы с другими HTTP-ресурсами, добавьте их сюда.
+         Включаем для дебага, чтобы было проще отлаживать. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain> <!-- Эмулятор Android -->
+        <!-- Если API использует HTTP, добавьте его сюда (например, api.example.com) -->
+    </domain-config>
+</network-security-config>
