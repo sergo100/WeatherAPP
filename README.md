@@ -25,12 +25,12 @@
 - **Material Design Components**
 ---
 ## 📱 Скриншоты
-![photo_2025-08-17_15-21-18.jpg](images/photo_2025-08-17_15-21-18.jpg)
-![photo_2025-08-17_15-21-26.jpg](images/photo_2025-08-17_15-21-26.jpg)
-![photo_2025-08-17_15-21-32.jpg](images/photo_2025-08-17_15-21-32.jpg)
-![photo_2025-08-17_15-21-37.jpg](images/photo_2025-08-17_15-21-37.jpg)
-![photo_2025-08-17_15-21-42.jpg](images/photo_2025-08-17_15-21-42.jpg)
-![photo_2025-08-17_15-21-48.jpg](images/photo_2025-08-17_15-21-48.jpg)
+<p float="left">
+  <img src="images/photo_2025-08-17_15-21-18.jpg" width="200" />
+  <img src="images/photo_2025-08-17_15-22-10.jpg" width="200" />
+  <img src="images/photo_2025-08-17_15-23-05.jpg" width="200" />
+  <img src="images/photo_2025-08-17_15-24-12.jpg" width="200" />
+</p>
 
 ## ⚡ Установка
 1. Склонировать репозиторий:
