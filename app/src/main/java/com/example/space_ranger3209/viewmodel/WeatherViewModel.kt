@@ -1,12 +1,13 @@
-package com.example.weatherapp.viewmodel
+package com.example.space_ranger3209.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.BuildConfig
-import com.example.weatherapp.data.WeatherApi
-import com.example.weatherapp.data.WeatherResponse
-import com.example.weatherapp.data.CityDataStore
+import com.example.space_ranger3209.weatherapp.BuildConfig // <- исправлено
+import com.example.space_ranger3209.data.WeatherApi
+import com.example.space_ranger3209.data.WeatherResponse
+import com.example.space_ranger3209.data.CityDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,11 +23,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     private val API_KEY = BuildConfig.WEATHER_API_KEY.removeSurrounding("\"")
     private val BASE_URL = "https://api.weatherapi.com/v1/"
 
-    // Проверка API ключа при инициализации
     init {
-        require(API_KEY.isNotEmpty()) {
-            "API ключ не настроен. Проверьте local.properties и BuildConfig"
-        }
+        Log.d(TAG, "API Key accessed: ${API_KEY.take(5)}...")
     }
 
     private val weatherApi: WeatherApi by lazy {
@@ -53,7 +51,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     private val cityDataStore = CityDataStore(application)
 
-    // Состояния UI
     private val _weatherState = MutableStateFlow<WeatherResponse?>(null)
     val weatherState: StateFlow<WeatherResponse?> = _weatherState.asStateFlow()
 
@@ -63,13 +60,13 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    // Добавлено: Состояние для текущего города
     private val _currentCity = MutableStateFlow<String?>(null)
     val currentCity: StateFlow<String?> = _currentCity.asStateFlow()
 
     fun loadSavedCityAndFetchWeather() {
         viewModelScope.launch {
             _isLoading.value = true
+            _errorMessage.value = null
             try {
                 val savedCity = cityDataStore.getCityName()
                 if (!savedCity.isNullOrBlank()) {
@@ -87,6 +84,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     fun fetchWeather(city: String) {
         viewModelScope.launch {
             _isLoading.value = true
+            _errorMessage.value = null
             try {
                 fetchWeatherData(city)
                 cityDataStore.saveCityName(city)
@@ -99,39 +97,42 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    // Добавлено: Обновление погоды для текущего города
     fun refreshWeather() {
-        _currentCity.value?.let { city ->
-            fetchWeather(city)
-        }
+        _currentCity.value?.let { fetchWeather(it) }
+            ?: run { _errorMessage.value = "Нет выбранного города для обновления погоды." }
     }
 
     private suspend fun fetchWeatherData(city: String) {
         val response = weatherApi.getWeatherForecast(
-            key = API_KEY,
             q = city,
-            days = 3,  // Увеличено количество дней для прогноза
-            aqi = "no",
-            alerts = "no"
+            key = API_KEY,
+            days = 3,
+            lang = "ru"
         )
         _weatherState.value = response
         _errorMessage.value = null
     }
 
     private fun handleError(e: Exception, context: String) {
-        _errorMessage.value = when {
-            e is java.net.SocketTimeoutException -> "Превышено время ожидания ответа от сервера"
-            e is java.net.UnknownHostException -> "Отсутствует интернет-соединение"
-            e.message?.contains("403") == true -> "Ошибка доступа. Проверьте API ключ"
-            e.message?.contains("400") == true -> "Некорректный запрос. Проверьте название города"
-            e.message?.contains("404") == true -> "Город не найден"
-            else -> "Ошибка при получении данных для $context: ${e.message ?: "Неизвестная ошибка"}"
+        val errorMessageText = when {
+            e is java.net.SocketTimeoutException -> "Превышено время ожидания ответа от сервера."
+            e is java.net.UnknownHostException -> "Отсутствует интернет-соединение."
+            e.message?.contains("403") == true -> "Ошибка доступа (403). Проверьте API ключ."
+            e.message?.contains("400") == true -> "Некорректный запрос (400)."
+            e.message?.contains("404") == true -> "Город не найден (404)."
+            e is retrofit2.HttpException -> "HTTP ошибка: Код ${e.code()}"
+            else -> "Ошибка при получении данных для $context: ${e.localizedMessage ?: "Неизвестная ошибка"}"
         }
+        _errorMessage.value = errorMessageText
         _weatherState.value = null
+        Log.e(TAG, errorMessageText, e)
     }
 
-    // Добавлено: Очистка ошибок
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    companion object {
+        private const val TAG = "WeatherViewModel"
     }
 }

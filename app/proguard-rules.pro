@@ -1,73 +1,45 @@
-# ============================================
-# ProGuard правила для WeatherApp
-# ============================================
-
-# Общие настройки
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
--verbose
-
-# --------------------------------------------
-# Основные библиотеки
-# --------------------------------------------
-
-# Kotlin
--keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
--keepclassmembers class ** {
-    @kotlin.Metadata *;
-}
-
-# Retrofit
+# Правила для Retrofit и OkHttp
+-dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
 -keep interface retrofit2.** { *; }
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
 
-# OkHttp
+-dontwarn okhttp3.**
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 
-# Gson
--keep class com.google.gson.** { *; }
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
+# Правила для Gson
+-dontwarn com.google.gson.**
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory { *; }
+-keep class * implements com.google.gson.JsonSerializer { *; }
+-keep class * implements com.google.gson.JsonDeserializer { *; }
 
-# --------------------------------------------
-# Модели данных приложения
-# --------------------------------------------
+# ОЧЕНЬ ВАЖНО: Сохраняет ваши модели данных Kotlin!
+# Это гарантирует, что классы и их поля не будут обфусцированы.
+# Пакет 'com.example.space_ranger3209.data' должен ТОЧНО соответствовать вашим моделям.
+-keep class com.example.space_ranger3209.data.** { *; } # ИСПРАВЛЕНО: Правильный пакет для моделей
 
-# Сохраняем все модели данных (адаптируйте под ваш пакет)
--keep class com.example.weatherapp.data.model.** { *; }
--keepclassmembers class com.example.weatherapp.data.model.** {
-    *;
+# Дополнительные правила для Kotlin data class
+-keepclassmembers class ** {
+    @kotlin.Metadata <methods>;
 }
 
-# --------------------------------------------
 # Android специфичные правила
-# --------------------------------------------
-
-# Активности, сервисы и др. компоненты
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 
-# ViewBinding
+# ViewBinding (если используется, хотя в Compose не так актуально)
 -keepclassmembers class * extends android.view.View {
     <init>(android.content.Context);
     <init>(android.content.Context, android.util.AttributeSet);
     <init>(android.content.Context, android.util.AttributeSet, int);
 }
 
-# --------------------------------------------
 # Дополнительные настройки
-# --------------------------------------------
-
-# Для дебага (можно отключить в релизе)
 -keepattributes SourceFile,LineNumberTable
 
-# Игнорировать предупреждения
+# Игнорировать предупреждения (полезно для уменьшения "шума" в логах сборки)
 -dontwarn kotlin.**
 -dontwarn com.google.**
 -dontwarn okhttp3.**

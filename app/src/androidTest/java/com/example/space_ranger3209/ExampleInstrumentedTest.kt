@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.space_ranger3209
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

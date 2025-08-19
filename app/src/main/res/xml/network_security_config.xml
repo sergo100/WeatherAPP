@@ -12,6 +12,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain> <!-- Эмулятор Android -->
+        <domain includeSubdomains="true">api.weatherapi.com</domain> <!-- Добавлен для поддержки HTTP, если используется -->
         <!-- Если API использует HTTP, добавьте его сюда (например, api.example.com) -->
     </domain-config>
 </network-security-config>

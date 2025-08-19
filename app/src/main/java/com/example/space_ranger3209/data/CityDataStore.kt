@@ -1,4 +1,4 @@
-package com.example.weatherapp.data // Правильный пакет для данных
+package com.example.space_ranger3209.data // ИСПРАВЛЕНО: Правильный пакет
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 // Объявление делегата DataStore
-// Context.dataStore - это свойство-расширение, которое возвращает экземпляр DataStore
-// Имя "city_preferences" будет использоваться для файла, в котором будут храниться настройки
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "city_preferences")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "city_preferences")
 
 // Класс для управления сохранением и загрузкой названия города
 class CityDataStore(private val context: Context) {
@@ -26,7 +24,6 @@ class CityDataStore(private val context: Context) {
      */
     suspend fun saveCityName(cityName: String) {
         context.dataStore.edit { preferences ->
-            // Устанавливаем значение для ключа CITY_NAME_KEY
             preferences[CITY_NAME_KEY] = cityName
         }
     }
@@ -36,9 +33,6 @@ class CityDataStore(private val context: Context) {
      * @return Название города или null, если город не сохранен.
      */
     suspend fun getCityName(): String? {
-        // map { it[CITY_NAME_KEY] } создает Flow, который преобразует Preferences
-        // в значение, связанное с CITY_NAME_KEY.
-        // first() приостанавливает выполнение корутины и возвращает первое значение из Flow.
         return context.dataStore.data.map { preferences ->
             preferences[CITY_NAME_KEY]
         }.first()

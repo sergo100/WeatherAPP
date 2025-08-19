@@ -1,30 +1,26 @@
-package com.example.weatherapp
+package com.example.space_ranger3209.weatherapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.WeatherScreen
-import com.example.weatherapp.ui.AboutScreen
-import com.example.weatherapp.ui.HelpScreen
-import com.example.weatherapp.viewmodel.WeatherViewModel
+import com.example.space_ranger3209.ui.WeatherScreen
+import com.example.space_ranger3209.ui.AboutScreen
+import com.example.space_ranger3209.ui.HelpScreen
+import com.example.space_ranger3209.ui.theme.WeatherAppTheme
+import com.example.space_ranger3209.viewmodel.WeatherViewModel
 import com.google.android.gms.ads.MobileAds
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.weatherapp.workers.DailyWeatherNotificationWorker
-import com.example.weatherapp.utils.createNotificationChannel
+import com.example.space_ranger3209.workers.DailyWeatherNotificationWorker
+import com.example.space_ranger3209.utils.createNotificationChannel
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -41,13 +37,10 @@ class MainActivity : ComponentActivity() {
         // Планируем ежедневное уведомление о погоде
         scheduleDailyWeatherNotification()
 
-        // Для проверки API_KEY
-        Log.d("API_KEY_CHECK", "BuildConfig.WEATHER_API_KEY = '${BuildConfig.WEATHER_API_KEY}'")
-
         setContent {
             WeatherAppTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = androidx.compose.ui.Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
@@ -93,16 +86,5 @@ class MainActivity : ComponentActivity() {
             ExistingPeriodicWorkPolicy.UPDATE,
             dailyWorkRequest
         )
-        Log.d("Scheduler", "Daily weather notification scheduled.")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    WeatherAppTheme {
-        val navController = rememberNavController()
-        val weatherViewModel: WeatherViewModel = viewModel()
-        WeatherScreen(weatherViewModel = weatherViewModel, navController = navController)
     }
 }
