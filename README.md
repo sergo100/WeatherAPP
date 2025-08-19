@@ -26,10 +26,10 @@
 ---
 ## 📱 Скриншоты
 <p float="left">
-<img src="images/photo_2025-08-17_15-21-18.jpg" width="200" alt="Главный экран с текущей погодой" />
-<img src="images/photo_2025-08-17_15-26.jpg" width="200" alt="Экран прогноза на 3 дня" />
-<img src="images/photo_2025-08-17_15-32.jpg" width="200" alt="Экран поиска города" />
-<img src="images/photo_2025-08-17_15-37.jpg" width="200" alt="Настройки уведомлений" />
+<img src="images/photo_2025-08-17_15-21-18.jpg" width="200" >
+<img src="images/photo_2025-08-17_15-26.jpg" width="200">
+<img src="images/photo_2025-08-17_15-32.jpg" width="200">
+<img src="images/photo_2025-08-17_15-37.jpg" width="200">
 </p>
 <br>
 
