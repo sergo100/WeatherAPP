@@ -27,11 +27,11 @@
 ## 📱 Скриншоты
 
 <img src="images/photo_2025-08-17_15-21-18.jpg" width="200" />
-<img src="images/photo_2025-08-17_15-26.jpg" width="200" />
-<img src="images/photo_2025-08-17_15-32.jpg" width="200" />
-<img src="images/photo_2025-08-17_15-37.jpg" width="200" />
-<img src="images/photo_2025-08-17_15-42.jpg" width="200" />
-<img src="images/photo_2025-08-17_15-47.jpg" width="200" />
+<img src="images/photo_2025-08-17_15-21-26.jpg" width="200" />
+<img src="images/photo_2025-08-17_15-21-32.jpg" width="200" />
+<img src="images/photo_2025-08-17_15-21-37.jpg" width="200" />
+<img src="images/photo_2025-08-17_15-21-42.jpg" width="200" />
+<img src="images/photo_2025-08-17_15-21-48.jpg" width="200" />
 
 
 ## ⚡ Установка
