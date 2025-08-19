@@ -26,10 +26,15 @@
 ---
 ## 📱 Скриншоты
 <p float="left">
-<img src="images/photo_2025-08-17_15-21-18.jpg" width="200" >
-<img src="images/photo_2025-08-17_15-26.jpg" width="200">
-<img src="images/photo_2025-08-17_15-32.jpg" width="200">
-<img src="images/photo_2025-08-17_15-37.jpg" width="200">
+  <img src="images/photo_2025-08-17_15-21-18.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
+  <img src="images/photo_2025-08-17_15-26.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
+  <img src="images/photo_2025-08-17_15-32.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
+</p>
+
+<p float="left">
+  <img src="images/photo_2025-08-17_15-37.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
+  <img src="images/photo_2025-08-17_15-42.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
+  <img src="images/photo_2025-08-17_15-47.jpg" width="200" style="margin-right:10px; margin-bottom:10px;" />
 </p>
 <br>
 
