@@ -1,4 +1,4 @@
-package com.example.space_ranger3209.weatherapp.widget // ИСПРАВЛЕНО: Пакет теперь соответствует структуре приложения
+package com.example.space_ranger3209.weatherapp.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -9,9 +9,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 import android.widget.RemoteViews
-import com.example.space_ranger3209.weatherapp.BuildConfig // Правильный импорт BuildConfig
-import com.example.space_ranger3209.weatherapp.R // Правильный импорт R
-import com.example.space_ranger3209.weatherapp.MainActivity // Правильный импорт MainActivity
+import com.example.space_ranger3209.weatherapp.BuildConfig
+import com.example.space_ranger3209.weatherapp.R
+import com.example.space_ranger3209.weatherapp.MainActivity
 import com.example.space_ranger3209.data.CityDataStore
 import com.example.space_ranger3209.data.WeatherApi
 import kotlinx.coroutines.*
@@ -78,7 +78,10 @@ class WeatherAppWidget : AppWidgetProvider() {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        views.setOnClickPendingIntent(R.id.widget_city_name, pendingIntent)
+        // Устанавливаем обработчик клика для всего виджета (родительского RelativeLayout)
+        // Это более интуитивно, чем клик только по названию города
+        views.setOnClickPendingIntent(R.id.widget_root_layout, pendingIntent)
+
 
         scope.launch {
             try {
@@ -89,6 +92,7 @@ class WeatherAppWidget : AppWidgetProvider() {
                     views.setTextViewText(R.id.widget_city_name, "Нет интернета 🌐")
                     views.setTextViewText(R.id.widget_temperature, "--°C")
                     views.setTextViewText(R.id.widget_condition, "Проверьте соединение")
+                    views.setTextViewText(R.id.widget_condition_emoji, "❌") // Эмодзи для ошибки сети
                     views.setTextViewText(R.id.widget_last_updated, "Обновлено: " + SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()))
                     withContext(Dispatchers.Main) {
                         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -106,6 +110,7 @@ class WeatherAppWidget : AppWidgetProvider() {
                     views.setTextViewText(R.id.widget_city_name, "Ошибка API 🔑")
                     views.setTextViewText(R.id.widget_temperature, "--°C")
                     views.setTextViewText(R.id.widget_condition, "Ключ не настроен")
+                    views.setTextViewText(R.id.widget_condition_emoji, "🚫") // Эмодзи для ошибки API
                     views.setTextViewText(R.id.widget_last_updated, "Обновлено: " + SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()))
                     withContext(Dispatchers.Main) {
                         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -115,9 +120,10 @@ class WeatherAppWidget : AppWidgetProvider() {
 
                 if (savedCity.isNullOrBlank()) {
                     Log.d(TAG, "No city saved for widget. Prompting user to open app.")
-                    views.setTextViewText(R.id.widget_city_name, "Нет города 📍")
+                    views.setTextViewText(R.id.widget_city_name, "Нет города �")
                     views.setTextViewText(R.id.widget_temperature, "--°C")
                     views.setTextViewText(R.id.widget_condition, "Нажмите для настройки")
+                    views.setTextViewText(R.id.widget_condition_emoji, "🏠") // Эмодзи для отсутствия города
                     views.setTextViewText(R.id.widget_last_updated, "Обновлено: " + SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()))
                 } else {
                     Log.d(TAG, "Fetching weather for widget for city: $savedCity")
@@ -131,10 +137,12 @@ class WeatherAppWidget : AppWidgetProvider() {
                     val cityName = weatherResponse.location.name
                     val currentTemp = weatherResponse.current.temp_c
                     val conditionText = weatherResponse.current.condition.text
+                    val weatherEmoji = getWeatherEmoji(conditionText) // Получаем эмодзи
 
                     views.setTextViewText(R.id.widget_city_name, cityName)
                     views.setTextViewText(R.id.widget_temperature, "$currentTemp°C")
                     views.setTextViewText(R.id.widget_condition, conditionText)
+                    views.setTextViewText(R.id.widget_condition_emoji, weatherEmoji) // Устанавливаем эмодзи
                     views.setTextViewText(R.id.widget_last_updated, "Обновлено: " + SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()))
                     Log.d(TAG, "Widget data updated successfully for $cityName.")
                 }
@@ -143,6 +151,7 @@ class WeatherAppWidget : AppWidgetProvider() {
                 views.setTextViewText(R.id.widget_city_name, "Ошибка 🐞")
                 views.setTextViewText(R.id.widget_temperature, "--°C")
                 views.setTextViewText(R.id.widget_condition, "Ошибка загрузки")
+                views.setTextViewText(R.id.widget_condition_emoji, "❗") // Эмодзи для общей ошибки
                 views.setTextViewText(R.id.widget_last_updated, "Обновлено: " + SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()))
             } finally {
                 withContext(Dispatchers.Main) {
@@ -152,6 +161,7 @@ class WeatherAppWidget : AppWidgetProvider() {
         }
     }
 
+    // Вспомогательная функция для проверки интернет-соединения
     private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -159,5 +169,19 @@ class WeatherAppWidget : AppWidgetProvider() {
         return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    }
+
+    // Функция для получения эмодзи на основе текстового описания погоды
+    private fun getWeatherEmoji(conditionText: String): String {
+        return when {
+            conditionText.contains("солнечно", ignoreCase = true) || conditionText.contains("ясно", ignoreCase = true) -> "☀️"
+            conditionText.contains("переменная облачность", ignoreCase = true) -> "🌤️" // Добавлено для "переменная облачность"
+            conditionText.contains("облачно", ignoreCase = true) || conditionText.contains("пасмурно", ignoreCase = true) -> "☁️"
+            conditionText.contains("дождь", ignoreCase = true) -> "🌧️"
+            conditionText.contains("снег", ignoreCase = true) -> "❄️"
+            conditionText.contains("гроза", ignoreCase = true) -> "⛈️"
+            conditionText.contains("туман", ignoreCase = true) || conditionText.contains("дымка", ignoreCase = true) -> "🌫️"
+            else -> "❓"
+        }
     }
 }
