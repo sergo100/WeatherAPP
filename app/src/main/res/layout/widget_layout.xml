@@ -9,8 +9,8 @@
     <!-- Иконка приложения -->
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="8dp"
@@ -25,9 +25,9 @@
         android:layout_alignParentTop="true"
         android:text="Загрузка..."
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        />
+        /> <!-- Увеличен размер текста для города -->
 
     <!-- Температура -->
     <TextView
@@ -37,9 +37,10 @@
         android:layout_below="@id/widget_city_name"
         android:text="--°C"
         android:textColor="@android:color/white"
-        android:textSize="32sp"
+        android:textSize="48sp"
         android:textStyle="bold"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="4dp" /> <!-- ЗНАЧИТЕЛЬНО УВЕЛИЧЕН РАЗМЕР ТЕМПЕРАТУРЫ, Небольшой отступ сверху -->
 
     <!-- Условие погоды и эмодзи -->
     <LinearLayout
@@ -49,7 +50,8 @@
         android:layout_below="@id/widget_temperature"
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"> <!-- Небольшой отступ сверху -->
 
         <TextView
             android:id="@+id/widget_condition"
@@ -57,8 +59,8 @@
             android:layout_height="wrap_content"
             android:text="-"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:layout_marginEnd="4dp" />
+            android:textSize="18sp"
+            android:layout_marginEnd="8dp" /> <!-- Увеличен размер текста для условия, Увеличен отступ -->
 
         <TextView
             android:id="@+id/widget_condition_emoji"
@@ -66,7 +68,8 @@
             android:layout_height="wrap_content"
             android:text="❓"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="32sp"
+            /> <!-- УВЕЛИЧЕН РАЗМЕР ЭМОДЗИ -->
     </LinearLayout>
 
     <!-- Время обновления -->
@@ -78,6 +81,6 @@
         android:layout_alignParentBottom="true"
         android:text="Обновлено: --:--"
         android:textColor="#CCCCCC"
-        android:textSize="10sp" />
+        android:textSize="12sp" /> <!-- Немного увеличен размер времени обновления -->
 
 </RelativeLayout>
