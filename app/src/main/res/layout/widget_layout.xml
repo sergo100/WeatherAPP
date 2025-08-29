@@ -5,18 +5,28 @@
     android:background="@drawable/widget_background"
     android:padding="8dp">
 
+    <!-- Иконка приложения -->
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:src="@mipmap/ic_launcher" /> <!-- Используем стандартную иконку запуска -->
+
     <!-- Город -->
     <TextView
         android:id="@+id/widget_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/app_icon"
+        android:layout_alignParentTop="true"
         android:text="Загрузка..."
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        /> <!-- ИСПРАВЛЕНО: Удален android:paddingBottom -->
+        /> <!-- ИСПРАВЛЕНО: Закрывающий слеш добавлен -->
 
     <!-- Температура -->
     <TextView
