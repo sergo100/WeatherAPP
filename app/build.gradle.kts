@@ -42,8 +42,8 @@ android {
         applicationId = "com.example.space_ranger3209.weatherapp" // <-- ИСПРАВЛЕНО!
         minSdk = 26
         targetSdk = 34
-        versionCode = 52 // ИЗМЕНЕНО: Увеличьте этот номер для каждой новой загрузки (теперь 52)
-        versionName = "2.0.12" // Обновите имя версии
+        versionCode = 4 // ИЗМЕНЕНО: Увеличьте этот номер для каждой новой загрузки (теперь 52)
+        versionName = "1.1.0" // Обновите имя версии
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
