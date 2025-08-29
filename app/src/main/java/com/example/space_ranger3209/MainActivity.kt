@@ -1,4 +1,4 @@
-package com.example.space_ranger3209.weatherapp
+package com.example.space_ranger3209.weatherapp // ИСПРАВЛЕНО: Пакет должен соответствовать applicationId
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,8 +19,8 @@ import com.google.android.gms.ads.MobileAds
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.space_ranger3209.workers.DailyWeatherNotificationWorker
 import com.example.space_ranger3209.utils.createNotificationChannel
+import com.example.space_ranger3209.workers.DailyWeatherNotificationWorker
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 

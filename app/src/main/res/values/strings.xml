@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="loading_text">Загрузка...</string>
+    <string name="default_time">--:--</string>
+    <string name="default_temp">--°C</string>
+    <string name="default_condition">-</string>
+    <string name="default_last_updated">Обновлено: --:--"</string>
+    <!-- Добавлен отсутствующий строковый ресурс для HelpScreen -->
+    <string name="help_info">Для получения дополнительной помощи свяжитесь с разработчиком.</string>
 </resources>

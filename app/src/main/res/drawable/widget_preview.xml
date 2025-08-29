@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="180dp"
+    android:height="110dp"
+    android:viewportWidth="180"
+    android:viewportHeight="110">
+
+    <!-- Фон виджета: Скругленный прямоугольник с помощью Path -->
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M12,0 L168,0 A12,12 0 0,1 180,12 L180,98 A12,12 0 0,1 168,110 L12,110 A12,12 0 0,1 0,98 L0,12 A12,12 0 0,1 12,0 Z" />
+
+    <!-- Упрощенный значок солнца для предпросмотра -->
+    <group>
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M90,55 A15,15 0 1,1 90,54.99 Z" />
+        <!-- Лучи солнца -->
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="4"
+            android:strokeLineCap="round"
+            android:pathData="M90,30 L90,20 M90,80 L90,90 M60,55 L50,55 M120,55 L130,55 M68,37 L58,27 M112,73 L122,83 M68,73 L58,83 M112,37 L122,27" />
+    </group>
+</vector>

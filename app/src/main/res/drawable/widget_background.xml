@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#802196F3" /> <!-- Полупрозрачный синий цвет (80 - это альфа-канал, 2196F3 - синий) -->
+    <corners android:radius="12dp" /> <!-- Скругленные углы с радиусом 12dp -->
+</shape>
