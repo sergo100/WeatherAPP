@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_temperature"
         android:layout_alignParentStart="true"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center_vertical"
         android:layout_marginTop="4dp"> <!-- Небольшой отступ сверху -->
 
@@ -60,7 +60,7 @@
             android:text="-"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:layout_marginEnd="8dp" /> <!-- Увеличен размер текста для условия, Увеличен отступ -->
+            /> <!-- Увеличен размер текста для условия -->
 
         <TextView
             android:id="@+id/widget_condition_emoji"
@@ -69,8 +69,8 @@
             android:text="❓"
             android:textColor="@android:color/white"
             android:textSize="32sp"
-            /> <!-- УВЕЛИЧЕН РАЗМЕР ЭМОДЗИ -->
-    </LinearLayout>
+            android:layout_marginTop="-4dp" />
+    </LinearLayout> <!-- УВЕЛИЧЕН РАЗМЕР ЭМОДЗИ, небольшой отрицательный отступ для компактности -->
 
     <!-- Время обновления -->
     <TextView
