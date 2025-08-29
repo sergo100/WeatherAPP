@@ -1,4 +1,4 @@
-package com.example.space_ranger3209.services // ИСПРАВЛЕНО: Правильный пакет для сервисов
+package com.example.space_ranger3209.weatherapp.services // ИСПРАВЛЕНО: Правильный пакет для сервисов
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
