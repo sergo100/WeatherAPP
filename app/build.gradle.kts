@@ -12,17 +12,14 @@ val apiKey by lazy {
         val properties = Properties().apply {
             File(rootDir, "local.properties").inputStream().use { load(it) }
         }
-        properties.getProperty("WEATHERAPI_TOKEN")?.trim()?.takeIf { it.isNotEmpty() } ?: run {
-            logger.error("⛔ WEATHERAPI_TOKEN не найден или пуст в local.properties!")
-            "\"\""
-        }
+        properties.getProperty("WEATHERAPI_TOKEN")?.trim() ?: ""
     } catch (e: Exception) {
-        logger.error("⛔ Ошибка чтения local.properties: ${e.message}")
-        "\"\""
+        logger.error("Ошибка чтения local.properties: ${e.message}")
+        ""
     }
 }
 
-// НОВЫЙ БЛОК: Загрузка свойств подписи из local.properties
+// Загрузка свойств подписи из local.properties
 val signingProperties = Properties().apply {
     val signingPropertiesFile = File(rootDir, "local.properties")
     if (signingPropertiesFile.exists()) {
@@ -33,16 +30,16 @@ val signingProperties = Properties().apply {
 }
 
 android {
-    // ИСПРАВЛЕНО: namespace теперь ТОЧНО соответствует applicationId
-    namespace = "com.example.space_ranger3209.weatherapp" // <-- ИЗМЕНЕНО!
+    // ИСПРАВЛЕНО: namespace теперь "com.example.space_ranger3209.weatherapp"
+    namespace = "com.example.space_ranger3209.weatherapp"
     compileSdk = 34
 
     defaultConfig {
-        // ИСПРАВЛЕНО: applicationId теперь соответствует пакету, используемому для R
-        applicationId = "com.example.space_ranger3209.weatherapp" // <-- ИСПРАВЛЕНО!
+        // ИСПРАВЛЕНО: applicationId также "com.example.space_ranger3209.weatherapp"
+        applicationId = "com.example.space_ranger3209.weatherapp" // Убедитесь, что это полное имя пакета!
         minSdk = 26
         targetSdk = 34
-        versionCode = 5 // ИЗМЕНЕНО: Увеличьте этот номер для каждой новой загрузки (теперь 52)
+        versionCode = 6 // ИЗМЕНЕНО: Увеличьте этот номер для каждой новой загрузки (был 45, теперь 46)
         versionName = "1.1.0" // Обновите имя версии
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +47,6 @@ android {
             useSupportLibrary = true
         }
 
-        // ИСПРАВЛЕНО: Добавлены кавычки вокруг apiKey для buildConfigField
         buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
         resValue("string", "google_maps_key", apiKey)
         multiDexEnabled = true
@@ -64,7 +60,7 @@ android {
 
     composeOptions {
         // ИСПРАВЛЕНО: Обновлена версия расширения компилятора Kotlin для Compose
-        kotlinCompilerExtensionVersion = "1.5.10" // <-- ИЗМЕНЕНО!
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     // БЛОК: signingConfigs - здесь Gradle узнает, какой ключ использовать для подписи релизной сборки
@@ -83,7 +79,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true// ВОЗВРАЩЕНО НА TRUE
+            isMinifyEnabled = true // ИСПРАВЛЕНО: Теперь `true` для включения сжатия кода и ресурсов
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -100,12 +96,12 @@ android {
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17 // <-- ИСПРАВЛЕНО на 17
+        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
-        jvmTarget = "17" // <-- ИСПРАВЛЕНО на 17
+        jvmTarget = "17"
         freeCompilerArgs += listOf(
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
@@ -113,16 +109,6 @@ android {
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xjvm-default=all"
         )
-    }
-
-    buildFeatures {
-        compose = true
-        buildConfig = true
-        viewBinding = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10" // <-- ИЗМЕНЕНО!
     }
 
     packaging {
@@ -137,9 +123,7 @@ android {
     }
 
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
+        unitTests.isIncludeAndroidResources = true
     }
 }
 

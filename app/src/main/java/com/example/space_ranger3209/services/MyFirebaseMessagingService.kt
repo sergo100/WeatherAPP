@@ -1,46 +1,39 @@
-package com.example.space_ranger3209.weatherapp.services // ИСПРАВЛЕНО: Правильный пакет для сервисов
+package com.example.space_ranger3209.weatherapp.services
 
 import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-// Класс MyFirebaseMessagingService обрабатывает входящие Firebase Cloud Messages (FCM)
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    // Этот метод вызывается, когда приложение получает сообщение FCM.
-    // Здесь вы можете обрабатывать данные сообщения и отображать уведомления.
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        // Логируем ID сообщения
-        Log.d(TAG, "From: ${remoteMessage.from}")
+        Log.d(TAG, "Уведомление получено от: ${remoteMessage.from}")
 
-        // Проверяем, содержит ли сообщение данные.
+        // Логирование данных полезной нагрузки (payload data)
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-            // TODO: Здесь вы можете обработать данные, например, показать уведомление
-            // scheduleJob() // Если вам нужна фоновая задача
+            Log.d(TAG, "Данные полезной нагрузки сообщения: ${remoteMessage.data}")
+            // Здесь вы можете обрабатывать эти данные
         }
 
-        // Проверяем, содержит ли сообщение уведомление.
+        // Логирование содержимого уведомления (title и body)
         remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
-            // TODO: Здесь вы можете извлечь заголовок и тело уведомления
-            // sendNotification(it.title, it.body)
+            Log.d(TAG, "Заголовок уведомления: ${it.title}")
+            Log.d(TAG, "Тело уведомления: ${it.body}")
+            // Здесь вы можете извлечь заголовок и тело уведомления
+            // showWeatherNotification(applicationContext, it.title ?: "Уведомление", it.body ?: "Новое сообщение")
         }
     }
 
-    // Этот метод вызывается, когда создается новый токен регистрации FCM.
-    // Токен необходим для отправки сообщений на конкретное устройство.
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(TAG, "Refreshed token: $token")
-
-        // TODO: Отправьте этот токен на ваш сервер приложений.
-        // sendRegistrationToServer(token)
+        Log.d(TAG, "Новый токен регистрации FCM: $token")
+        // Отправьте этот токен на ваш сервер приложений, если у вас есть бэкенд
     }
 
     companion object {
-        private const val TAG = "MyFirebaseMsgService"
+        private const val TAG = "MyFirebaseMsgService" // Тег для Logcat
     }
 }

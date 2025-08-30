@@ -19,23 +19,35 @@ import com.google.android.gms.ads.MobileAds
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.Constraints // Добавлен импорт Constraints
+import androidx.work.NetworkType // Добавлен импорт NetworkType
 import com.example.space_ranger3209.utils.createNotificationChannel
 import com.example.space_ranger3209.workers.DailyWeatherNotificationWorker
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
+// import com.google.firebase.messaging.FirebaseMessaging // <-- УДАЛЕН ИМПОРТ
+import android.util.Log // <-- УДАЛЕН ИМПОРТ, если не используется в другом месте
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Инициализация AdMob
         MobileAds.initialize(this) {}
-
-        // Создаем канал уведомлений
         createNotificationChannel(this)
-
-        // Планируем ежедневное уведомление о погоде
         scheduleDailyWeatherNotification()
+
+        // УДАЛЕН ВРЕМЕННЫЙ КОД ДЛЯ ЛОГИРОВАНИЯ FCM ТОКЕНА
+        /*
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM_TOKEN", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            Log.d("FCM_TOKEN", "Current token: $token")
+        }
+        */
+        // КОНЕЦ УДАЛЕННОГО КОДА
 
         setContent {
             WeatherAppTheme {
@@ -73,11 +85,19 @@ class MainActivity : ComponentActivity() {
         if (currentTime.after(eightAm)) eightAm.add(Calendar.DAY_OF_MONTH, 1)
         val initialDelay = eightAm.timeInMillis - currentTime.timeInMillis
 
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
         val dailyWorkRequest = PeriodicWorkRequestBuilder<DailyWeatherNotificationWorker>(
             repeatInterval = 24,
-            repeatIntervalTimeUnit = TimeUnit.HOURS
+            repeatIntervalTimeUnit = TimeUnit.HOURS,
+            flexTimeInterval = 1,
+            flexTimeIntervalUnit = TimeUnit.HOURS
         )
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .setConstraints(constraints)
             .addTag(DailyWeatherNotificationWorker.WORK_NAME)
             .build()
 
